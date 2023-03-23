@@ -1,8 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using BoardGame;
+using chess_console;
 
-Position P;
+Board board = new Board(8, 8);
 
-P = new Position(3, 4);
-
-Console.WriteLine(P);
+Screen.PrintBoard(board);
