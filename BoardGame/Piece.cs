@@ -9,9 +9,9 @@ namespace BoardGame
         public int movesQty { get; private set; }
         public Board board { get; set; }
 
-        public Piece(Position position, Color color, Board board)
+        public Piece(Board board, Color color)
         {
-            this.position = position;
+            this.position = null;
             this.color = color;
             this.board = board;
             this.movesQty = 0;
