@@ -4,7 +4,17 @@ using BoardGame.Chess;
 using BoardGame.Enums;
 using BoardGame.Exceptions;
 using chess_console;
+using BoardGame.Chess;
 
+
+
+ChessPosition cp = new ChessPosition('a', 1);
+
+Console.WriteLine(cp);
+
+Console.WriteLine(cp.toPosition());
+
+/*
 try
 {
     Board board = new Board(8, 8);
@@ -19,3 +29,4 @@ catch (BoardException e)
 {
     Console.WriteLine(e.Message);
 }
+*/
