@@ -8,4 +8,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Curso - C#\Exercicios - C#\ChessProject\Chess-console\BoardGame\Chess\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="BoardGame\Chess\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Curso - C#\Exercicios - C#\ChessProject\Chess-console\BoardGame\Chess\.editorconfig" />
+  </ItemGroup>
+
 </Project>

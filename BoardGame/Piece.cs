@@ -9,12 +9,18 @@ namespace BoardGame
         public int movesQty { get; private set; }
         public Board board { get; set; }
 
+        // Constructors
         public Piece(Board board, Color color)
         {
             this.position = null;
             this.color = color;
             this.board = board;
             this.movesQty = 0;
+        }
+
+        public void IncrementMovesQty()
+        {
+            movesQty++;
         }
     }
 }

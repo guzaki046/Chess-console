@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Class designed to handle the conversion between a matrix index and the real-life chess positions
+using System;
 
 namespace BoardGame.Chess
 {
@@ -13,6 +14,7 @@ namespace BoardGame.Chess
             Line = line;
         }
 
+        // This method coverts the matrix index position to a real Chess board position
         public Position toPosition()
         {
             return new Position(8 - Line, Column - 'a');
