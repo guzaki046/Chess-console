@@ -7,7 +7,7 @@ namespace chess_console
 {
     internal class Screen
     {
-        //Prints the board with possible moves after user's original input
+        // Print the board on console
         public static void PrintBoard(Board board)
         {
             for (int i = 0; i < board.Lines;  i++)
@@ -15,22 +15,41 @@ namespace chess_console
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < board.Columns; j++)
                 {
-                    if (board.piece(i,j) == null)
-                    {
-                        Console.Write("- ");
-                    }
-                    else
-                    {
-                        PrintPiece(board.piece(i, j));
-                        Console.Write(" ");
-                    }
+                    PrintPiece(board.piece(i, j));
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
         }
 
-        // Read the position of the piece
+        //Prints the board with possible moves after user's original input
+        public static void PrintBoard(Board board, bool[,] possibleMovements)
+        {
+            ConsoleColor originalBackground = Console.BackgroundColor;
+            ConsoleColor changedBackgroung = ConsoleColor.DarkGray;
+
+            for (int i = 0; i < board.Lines; i++)
+            {
+                Console.Write(8 - i + " ");
+                for (int j = 0; j < board.Columns; j++)
+                {
+                    if (possibleMovements[i, j])
+                    {
+                        Console.BackgroundColor = changedBackgroung;
+                    }
+                    else
+                    {
+                        Console.BackgroundColor = originalBackground;
+                    }
+                    PrintPiece(board.piece(i, j));
+                    Console.BackgroundColor = originalBackground;
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+        }
+
+        // Reads a user input to set the position of the next movement. 
         public static ChessPosition ReadChessPosition()
         {
             string s = Console.ReadLine();
@@ -42,16 +61,24 @@ namespace chess_console
         //Reads a user input to set the position of the next movement
         public static void PrintPiece(Piece piece)
         {
-            if (piece.color == Color.White)
+            if (piece == null)
             {
-                Console.Write(piece);
+                Console.Write("- ");
             }
             else
             {
-                ConsoleColor aux = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(piece);
-                Console.ForegroundColor = aux;
+                if (piece.color == Color.White)
+                {
+                    Console.Write(piece);
+                }
+                else
+                {
+                    ConsoleColor aux = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(piece);
+                    Console.ForegroundColor = aux;
+                }
+                Console.Write(" ");
             }
         }
     }

@@ -2,11 +2,11 @@
 
 namespace BoardGame
 {
-    internal class Piece
+    internal abstract class Piece
     {
         public Position position { get; set; }
         public Color color { get; private set; }
-        public int movesQty { get; private set; }
+        public int movementsQty { get; private set; }
         public Board board { get; set; }
 
         // Constructors
@@ -15,12 +15,15 @@ namespace BoardGame
             this.position = null;
             this.color = color;
             this.board = board;
-            this.movesQty = 0;
+            this.movementsQty = 0;
         }
 
+        public abstract bool[,] PossibleMovements();
+
+        // Increase movements
         public void IncrementMovesQty()
         {
-            movesQty++;
+            movementsQty++;
         }
     }
 }

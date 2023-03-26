@@ -12,6 +12,16 @@
             Column = column;
         }
 
+        public Position()
+        {
+        }
+
+        public void SetValue(int line, int column)
+        {
+            Line = line;
+            Column = column;
+        }
+
         // Print position
         public override string ToString()
         {
