@@ -10,7 +10,7 @@ namespace BoardGame.Chess
 
         public override string ToString()
         {
-            return "T";
+            return "R";
         }
 
         // Implementing the Tower movements
