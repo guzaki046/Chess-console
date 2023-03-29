@@ -11,7 +11,7 @@ try
     ChessMatch match = new ChessMatch();
 
     while (!match.Finished)
-    { 
+    {
         Console.Clear();
         Screen.PrintMatch(match);
 
@@ -30,7 +30,7 @@ try
         Position destination = Screen.ReadChessPosition().toPosition();
         match.ValidDestinationPosition(origin, destination);
 
-        match.MadeMovement(origin, destination);
+        match.MakeMovement(origin, destination);
     }
 
 }

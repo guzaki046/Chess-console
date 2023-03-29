@@ -47,5 +47,9 @@ namespace BoardGame
         {
             movementsQty++;
         }
+        public void DecrementMovesQty()
+        {
+            movementsQty--;
+        }
     }
 }
