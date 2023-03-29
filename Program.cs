@@ -11,13 +11,9 @@ try
     ChessMatch match = new ChessMatch();
 
     while (!match.Finished)
-    {
+    { 
         Console.Clear();
-        Screen.PrintBoard(match.Board);
-        Console.WriteLine();
-
-        Console.WriteLine("Turn: " + match.Turn);
-        Console.WriteLine("Waiting for movement: " + match.CurrentPlayer);
+        Screen.PrintMatch(match);
 
         Console.WriteLine();
         Console.Write("Origin: ");

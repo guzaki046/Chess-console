@@ -1,5 +1,6 @@
 ﻿using BoardGame.Enums;
 using BoardGame.Exceptions;
+using System.Collections.Generic;
 
 namespace BoardGame.Chess
 {
@@ -9,6 +10,8 @@ namespace BoardGame.Chess
         public int Turn { get; private set; }
         public Color CurrentPlayer { get; private set; }
         public bool Finished { get; private set; }
+        private HashSet<Piece> Pieces;
+        private HashSet<Piece> Captured;
 
         // Initialize board
         public ChessMatch()
@@ -17,6 +20,8 @@ namespace BoardGame.Chess
             Turn = 1;
             CurrentPlayer = Color.White;
             Finished = false;
+            Pieces = new HashSet<Piece>();
+            Captured = new HashSet<Piece>();
             PutPieces();
         }
 
@@ -27,6 +32,10 @@ namespace BoardGame.Chess
             p.IncrementMovesQty();
             Piece capturedPiece = Board.RemovePiece(destination);
             Board.PutPiece(p, destination);
+            if (capturedPiece != null)
+            {
+                Captured.Add(capturedPiece);
+            }
         }
 
         public void MadeMovement(Position origin, Position destination)
@@ -72,23 +81,54 @@ namespace BoardGame.Chess
             }
         }
 
-        // 
+        public HashSet<Piece> CapturesPieces(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach(Piece x in Captured)
+            {
+                if (x.color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+            return aux;
+        }
+
+        public HashSet<Piece> PiecesInGame(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece x in Pieces)
+            {
+                if (x.color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+            aux.ExceptWith(CapturesPieces(color));
+            return aux;
+        }
+
+        public void PutNewPiece(char column, int line, Piece piece)
+        {
+            Board.PutPiece(piece, new ChessPosition(column, line).toPosition());
+            Pieces.Add(piece);
+        }
+
         private void PutPieces()
         {
-            Board.PutPiece(new Tower(Board, Color.White), new ChessPosition('c', 1).toPosition());
-            Board.PutPiece(new Tower(Board, Color.White), new ChessPosition('c', 2).toPosition());
-            Board.PutPiece(new Tower(Board, Color.White), new ChessPosition('d', 2).toPosition());
-            Board.PutPiece(new Tower(Board, Color.White), new ChessPosition('e', 2).toPosition());
-            Board.PutPiece(new Tower(Board, Color.White), new ChessPosition('e', 1).toPosition());
-            Board.PutPiece(new King(Board, Color.White), new ChessPosition('d', 1).toPosition());
+            PutNewPiece('c', 1, new Tower(Board, Color.White));
+            PutNewPiece('c', 2, new Tower(Board, Color.White));
+            PutNewPiece('d', 2, new Tower(Board, Color.White));
+            PutNewPiece('e', 1, new Tower(Board, Color.White));
+            PutNewPiece('e', 2, new Tower(Board, Color.White));
+            PutNewPiece('d', 1, new King(Board, Color.White));
 
-
-            Board.PutPiece(new Tower(Board, Color.Black), new ChessPosition('c', 7).toPosition());
-            Board.PutPiece(new Tower(Board, Color.Black), new ChessPosition('c', 8).toPosition());
-            Board.PutPiece(new Tower(Board, Color.Black), new ChessPosition('d', 7).toPosition());
-            Board.PutPiece(new Tower(Board, Color.Black), new ChessPosition('e', 7).toPosition());
-            Board.PutPiece(new Tower(Board, Color.Black), new ChessPosition('e', 8).toPosition());
-            Board.PutPiece(new King(Board, Color.Black), new ChessPosition('d', 8).toPosition());
+            PutNewPiece('c', 7, new Tower(Board, Color.Black));
+            PutNewPiece('c', 8, new Tower(Board, Color.Black));
+            PutNewPiece('d', 7, new Tower(Board, Color.Black));
+            PutNewPiece('e', 8, new Tower(Board, Color.Black));
+            PutNewPiece('e', 7, new Tower(Board, Color.Black));
+            PutNewPiece('d', 8, new King(Board, Color.Black));
         }
     }
 }
