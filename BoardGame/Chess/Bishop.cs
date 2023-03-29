@@ -1,19 +1,19 @@
-﻿using BoardGame.Enums;
+﻿using BoardGame;
+using BoardGame.Enums;
 
-namespace BoardGame.Chess
+namespace chess_console.BoardGame.Chess
 {
-    internal class Tower : Piece
+    internal class Bishop : Piece
     {
-        public Tower(Board board, Color color) : base(board, color)
+        public Bishop(Board board, Color color) : base(board, color)
         {
         }
 
         public override string ToString()
         {
-            return "T";
+            return "B";
         }
 
-        // Implementing the Tower movements
         private bool CanMove(Position pos)
         {
             Piece p = board.piece(pos);
@@ -24,10 +24,10 @@ namespace BoardGame.Chess
         {
             bool[,] mat = new bool[board.Lines, board.Columns];
 
-            Position pos = new Position(0,0);
+            Position pos = new Position(0, 0);
 
-            // upward
-            pos.SetValue(position.Line - 1, position.Column);
+            // North West
+            pos.SetValue(position.Line - 1, position.Column - 1);
             while (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
@@ -35,11 +35,11 @@ namespace BoardGame.Chess
                 {
                     break;
                 }
-                pos.Line = pos.Line - 1;
+                pos.SetValue(pos.Line - 1, pos.Column - 1);
             }
 
-            // downward
-            pos.SetValue(position.Line + 1, position.Column);
+            // North east
+            pos.SetValue(position.Line - 1, position.Column + 1);
             while (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
@@ -47,11 +47,11 @@ namespace BoardGame.Chess
                 {
                     break;
                 }
-                pos.Line = pos.Line + 1;
+                pos.SetValue(pos.Line - 1, pos.Column + 1);
             }
 
-            // right
-            pos.SetValue(position.Line, position.Column + 1);
+            // South east
+            pos.SetValue(position.Line + 1, position.Column - 1);
             while (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
@@ -59,11 +59,12 @@ namespace BoardGame.Chess
                 {
                     break;
                 }
-                pos.Column = pos.Column + 1;
+                pos.SetValue(pos.Line + 1, pos.Column - 1);
             }
 
-            // left
-            pos.SetValue(position.Line, position.Column - 1);
+
+            // South West
+            pos.SetValue(position.Line + 1, position.Column + 1);
             while (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
@@ -71,8 +72,9 @@ namespace BoardGame.Chess
                 {
                     break;
                 }
-                pos.Column = pos.Column - 1;
+                pos.SetValue(pos.Line + 1, pos.Column + 1);
             }
+
             return mat;
         }
     }

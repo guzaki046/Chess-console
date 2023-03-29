@@ -1,20 +1,19 @@
-﻿using BoardGame.Enums;
+﻿using BoardGame;
+using BoardGame.Enums;
 
-namespace BoardGame.Chess
+namespace chess_console.BoardGame.Chess
 {
-    internal class King : Piece
+    internal class Knight : Piece
     {
-        // Constructor
-        public King (Board board, Color color) : base(board, color)
+        public Knight(Board board, Color color) : base(board, color)
         {
         }
 
         public override string ToString()
         {
-            return "K";
+            return "C";
         }
 
-        // Implementing the King movements
         private bool CanMove(Position pos)
         {
             Piece p = board.piece(pos);
@@ -27,57 +26,49 @@ namespace BoardGame.Chess
 
             Position pos = new Position(0, 0);
 
-            // upward
-            pos.SetValue(position.Line - 1, position.Column);
+            pos.SetValue(position.Line - 1, position.Column - 2);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
+            pos.SetValue(position.Line - 2, position.Column - 1);
 
-            //north east
-            pos.SetValue(position.Line - 1, position.Column + 1);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
+            pos.SetValue(position.Line + 1, position.Column - 2);
 
-            // right
-            pos.SetValue(position.Line, position.Column + 1);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
+            pos.SetValue(position.Line + 2, position.Column - 1);
 
-            //south east
-            pos.SetValue(position.Line + 1, position.Column + 1);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
+            pos.SetValue(position.Line - 1, position.Column + 2);
 
-            // downward
-            pos.SetValue(position.Line + 1, position.Column);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
+            pos.SetValue(position.Line - 2, position.Column + 1);
 
-            // south west
-            pos.SetValue(position.Line + 1, position.Column - 1);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
+            pos.SetValue(position.Line + 1, position.Column + 2);
 
-            // left
-            pos.SetValue(position.Line, position.Column - 1);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;
             }
+            pos.SetValue(position.Line + 2, position.Column + 1);
 
-            // north west
-            pos.SetValue(position.Line - 1, position.Column - 1);
             if (board.ValidPosition(pos) && CanMove(pos))
             {
                 mat[pos.Line, pos.Column] = true;

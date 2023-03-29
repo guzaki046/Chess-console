@@ -232,12 +232,12 @@ namespace BoardGame.Chess
 
         private void PutPieces()
         {
-            PutNewPiece('c', 1, new Tower(Board, Color.White));
+            PutNewPiece('c', 1, new Rook(Board, Color.White));
             PutNewPiece('d', 1, new King(Board, Color.White));
-            PutNewPiece('h', 7, new Tower(Board, Color.White));
+            PutNewPiece('h', 7, new Rook(Board, Color.White));
 
             PutNewPiece('a', 8, new King(Board, Color.Black));
-            PutNewPiece('b', 8, new Tower(Board, Color.Black));
+            PutNewPiece('b', 8, new Rook(Board, Color.Black));
 
 
             //PutNewPiece('c', 1, new Tower(Board, Color.White));
