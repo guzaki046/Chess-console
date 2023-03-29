@@ -1,12 +1,13 @@
 ﻿using BoardGame.Enums;
+using BoardGame.Exceptions;
 
 namespace BoardGame.Chess
 {
     internal class ChessMatch
     {
         public Board Board { get; private set; }
-        private int Turn;
-        private Color CurrentPlayer;
+        public int Turn { get; private set; }
+        public Color CurrentPlayer { get; private set; }
         public bool Finished { get; private set; }
 
         // Initialize board
@@ -15,17 +16,60 @@ namespace BoardGame.Chess
             Board = new Board(8, 8);
             Turn = 1;
             CurrentPlayer = Color.White;
-            Finished = false; 
+            Finished = false;
             PutPieces();
         }
 
-        // Execute a movement in the game
-        public void ExecuteMovevent(Position origin, Position destination)
+        // Execute a movement in the game, change the player and the turn
+        public void ExecuteMovement(Position origin, Position destination)
         {
             Piece p = Board.RemovePiece(origin);
             p.IncrementMovesQty();
             Piece capturedPiece = Board.RemovePiece(destination);
             Board.PutPiece(p, destination);
+        }
+
+        public void MadeMovement(Position origin, Position destination)
+        {
+            ExecuteMovement(origin, destination);
+            Turn++;
+            ChangePlayer();
+        }
+
+        public void ValidOriginPosition(Position pos)
+        {
+            if (Board.piece(pos) == null)
+            {
+                throw new BoardException("There is no piece in position of origin!");
+            }
+            if (CurrentPlayer != Board.piece(pos).color)
+            {
+                throw new BoardException("The piece of origin it is not yours!");
+            }
+            if (!Board.piece(pos).ExistsPossibleMovements())
+            {
+                throw new BoardException("There are no possible movements for the chosen piece");
+            }
+        }
+
+        public void ValidDestinationPosition(Position origin, Position destination)
+        {
+            if (!Board.piece(origin).CanMoveTo(destination))
+            {
+                throw new BoardException("Invalid destination position!");
+            }
+        }
+
+        private void ChangePlayer()
+        {
+            if (CurrentPlayer == Color.White)
+            {
+                CurrentPlayer = Color.Black;
+            }
+            else
+            {
+                CurrentPlayer = Color.White;
+            }
         }
 
         // 

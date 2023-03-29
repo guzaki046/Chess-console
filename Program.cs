@@ -14,10 +14,16 @@ try
     {
         Console.Clear();
         Screen.PrintBoard(match.Board);
+        Console.WriteLine();
+
+        Console.WriteLine("Turn: " + match.Turn);
+        Console.WriteLine("Waiting for movement: " + match.CurrentPlayer);
 
         Console.WriteLine();
         Console.Write("Origin: ");
         Position origin = Screen.ReadChessPosition().toPosition();
+        match.ValidOriginPosition(origin);
+
         bool[,] possibleMovements = match.Board.piece(origin).PossibleMovements();
 
         Console.Clear();
@@ -26,8 +32,9 @@ try
         Console.WriteLine();
         Console.Write("Destination: ");
         Position destination = Screen.ReadChessPosition().toPosition();
+        match.ValidDestinationPosition(origin, destination);
 
-        match.ExecuteMovevent(origin, destination);
+        match.MadeMovement(origin, destination);
     }
 
 }

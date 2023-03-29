@@ -1,4 +1,5 @@
 ﻿using BoardGame.Enums;
+using System.Text.RegularExpressions;
 
 namespace BoardGame
 {
@@ -16,6 +17,27 @@ namespace BoardGame
             this.color = color;
             this.board = board;
             this.movementsQty = 0;
+        }
+
+        public bool ExistsPossibleMovements()
+        {
+            bool[,] mat = PossibleMovements();
+            for (int i = 0; i < board.Lines; i++) 
+            {
+                for (int j = 0; j < board.Columns; j++)
+                {
+                    if (mat[i,j])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool CanMoveTo(Position pos)
+        {
+            return PossibleMovements()[pos.Line, pos.Column];
         }
 
         public abstract bool[,] PossibleMovements();
