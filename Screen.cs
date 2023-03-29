@@ -13,11 +13,20 @@ namespace chess_console
             Console.WriteLine();
             PrintCapturedPieces(match);
             Console.WriteLine();
-            Console.WriteLine("Turn: " + match.Turn);
-            Console.WriteLine("Waiting for movement: " + match.CurrentPlayer);
-            if (match.check)
+
+            if (!match.Finished)
             {
-                Console.WriteLine("CHECK!");
+                Console.WriteLine("Turn: " + match.Turn);
+                Console.WriteLine("Waiting for movement: " + match.CurrentPlayer);
+                if (match.check)
+                {
+                    Console.WriteLine("CHECK!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("CHECKMATE!");
+                Console.WriteLine("Winner: " + match.CurrentPlayer);
             }
         }
 
@@ -27,6 +36,7 @@ namespace chess_console
             Console.Write("White: ");
             PrintSet(match.CapturesPieces(Color.White));
             Console.WriteLine();
+
             Console.Write("Black: ");
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
