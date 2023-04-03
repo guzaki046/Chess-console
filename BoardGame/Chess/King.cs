@@ -92,7 +92,7 @@ namespace BoardGame.Chess
                 mat[pos.Line, pos.Column] = true;
             }
 
-            //special move
+            // #SpecialMove Castling
             if (movementsQty == 0 && !Match.check)
             {
                 // Minor castling

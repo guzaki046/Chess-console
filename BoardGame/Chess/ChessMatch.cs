@@ -13,6 +13,7 @@ namespace BoardGame.Chess
         private HashSet<Piece> Pieces;
         private HashSet<Piece> Captured;
         public bool check { get; private set; }
+        public Piece VulnerableEnPassant { get; private set; }
 
         // Initialize board
         public ChessMatch()
@@ -39,7 +40,7 @@ namespace BoardGame.Chess
                 Captured.Add(capturedPiece);
             }
 
-            // special move Minor castling
+            // #SpecialMove Minor castling
             if (p is King && destination.Column == origin.Column + 2)
             {
                 Position originR = new Position(origin.Line, origin.Column + 3);
@@ -49,7 +50,7 @@ namespace BoardGame.Chess
                 Board.PutPiece(R, destinationR);
             }
 
-            // special move Major castling
+            // #SpecialMove Major castling
             if (p is King && destination.Column == origin.Column - 2)
             {
                 Position originR = new Position(origin.Line, origin.Column - 4);
@@ -57,6 +58,25 @@ namespace BoardGame.Chess
                 Piece R = Board.RemovePiece(originR);
                 R.IncrementMovesQty();
                 Board.PutPiece(R, destinationR);
+            }
+
+            // #SpecialMove En Passant
+            if (p is Pawn)
+            {
+                if (origin.Column != destination.Column && capturedPiece == null)
+                {
+                    Position posP;
+                    if (p.color == Color.White)
+                    {
+                        posP = new Position(destination.Line + 1, destination.Column);
+                    }
+                    else
+                    {
+                        posP = new Position(destination.Line - 1, destination.Column);
+                    }
+                    capturedPiece = Board.RemovePiece(posP);
+                    Captured.Add(capturedPiece);
+                }
             }
 
             return capturedPiece;
@@ -73,7 +93,7 @@ namespace BoardGame.Chess
             }
             Board.PutPiece(p, origin);
 
-            // special move Minor castling
+            // #SpecialMove Minor castling
             if (p is King && destination.Column == origin.Column + 2)
             {
                 Position originR = new Position(origin.Line, origin.Column + 3);
@@ -83,7 +103,7 @@ namespace BoardGame.Chess
                 Board.PutPiece(R, originR);
             }
 
-            // special move Major castling
+            // #SpecialMove Major castling
             if (p is King && destination.Column == origin.Column + 2)
             {
                 Position originR = new Position(origin.Line, origin.Column - 4);
@@ -91,6 +111,25 @@ namespace BoardGame.Chess
                 Piece R = Board.RemovePiece(destinationR);
                 R.DecrementMovesQty();
                 Board.PutPiece(R, originR);
+            }
+
+            // #SpecialMove En Passant
+            if (p is Pawn)
+            {
+                if (origin.Column != destination.Column && capturedPiece == VulnerableEnPassant)
+                {
+                    Piece pawn = Board.RemovePiece(destination);
+                    Position posP;
+                    if (p.color == Color.White)
+                    {
+                        posP = new Position(3, destination.Column);
+                    }
+                    else
+                    {
+                        posP = new Position(4, destination.Column);
+                    }
+                    Board.PutPiece(pawn, posP);
+                }
             }
         }
 
@@ -118,6 +157,18 @@ namespace BoardGame.Chess
             {
                 Turn++;
                 ChangePlayer();
+            }
+
+            Piece p = Board.piece(destination);
+
+            // #SpecialMove En Passant
+            if (p is Pawn && (destination.Line == origin.Line + 2 || destination.Line == origin.Line - 2))
+            {
+                VulnerableEnPassant = p;
+            }
+            else
+            {
+                VulnerableEnPassant = null;
             }
         }
 
@@ -280,14 +331,14 @@ namespace BoardGame.Chess
             PutNewPiece('g', 1, new Knight(Board, Color.White));
             PutNewPiece('h', 1, new Rook(Board, Color.White));
 
-            PutNewPiece('a', 2, new Pawn(Board, Color.White));
-            PutNewPiece('b', 2, new Pawn(Board, Color.White));
-            PutNewPiece('c', 2, new Pawn(Board, Color.White));
-            PutNewPiece('d', 2, new Pawn(Board, Color.White));
-            PutNewPiece('e', 2, new Pawn(Board, Color.White));
-            PutNewPiece('f', 2, new Pawn(Board, Color.White));
-            PutNewPiece('g', 2, new Pawn(Board, Color.White));
-            PutNewPiece('h', 2, new Pawn(Board, Color.White));
+            PutNewPiece('a', 2, new Pawn(Board, Color.White, this));
+            PutNewPiece('b', 2, new Pawn(Board, Color.White, this));
+            PutNewPiece('c', 2, new Pawn(Board, Color.White, this));
+            PutNewPiece('d', 2, new Pawn(Board, Color.White, this));
+            PutNewPiece('e', 2, new Pawn(Board, Color.White, this));
+            PutNewPiece('f', 2, new Pawn(Board, Color.White, this));
+            PutNewPiece('g', 2, new Pawn(Board, Color.White, this));
+            PutNewPiece('h', 2, new Pawn(Board, Color.White, this));
 
             PutNewPiece('a', 8, new Rook(Board, Color.Black));
             PutNewPiece('b', 8, new Knight(Board, Color.Black));
@@ -298,14 +349,14 @@ namespace BoardGame.Chess
             PutNewPiece('g', 8, new Knight(Board, Color.Black));
             PutNewPiece('h', 8, new Rook(Board, Color.Black));
 
-            PutNewPiece('a', 7, new Pawn(Board, Color.Black));
-            PutNewPiece('b', 7, new Pawn(Board, Color.Black));
-            PutNewPiece('c', 7, new Pawn(Board, Color.Black));
-            PutNewPiece('d', 7, new Pawn(Board, Color.Black));
-            PutNewPiece('e', 7, new Pawn(Board, Color.Black));
-            PutNewPiece('f', 7, new Pawn(Board, Color.Black));
-            PutNewPiece('g', 7, new Pawn(Board, Color.Black));
-            PutNewPiece('h', 7, new Pawn(Board, Color.Black));
+            PutNewPiece('a', 7, new Pawn(Board, Color.Black, this));
+            PutNewPiece('b', 7, new Pawn(Board, Color.Black, this));
+            PutNewPiece('c', 7, new Pawn(Board, Color.Black, this));
+            PutNewPiece('d', 7, new Pawn(Board, Color.Black, this));
+            PutNewPiece('e', 7, new Pawn(Board, Color.Black, this));
+            PutNewPiece('f', 7, new Pawn(Board, Color.Black, this));
+            PutNewPiece('g', 7, new Pawn(Board, Color.Black, this));
+            PutNewPiece('h', 7, new Pawn(Board, Color.Black, this));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BoardGame;
+using BoardGame.Chess;
 using BoardGame.Enums;
 using System.Reflection.PortableExecutable;
 
@@ -6,8 +7,10 @@ namespace chess_console.BoardGame.Chess
 {
     internal class Pawn : Piece
     {
-        public Pawn(Board board, Color color) : base(board, color)
+        private ChessMatch Match;
+        public Pawn(Board board, Color color, ChessMatch match) : base(board, color)
         {
+            Match = match;
         }
 
         public override string ToString()
@@ -57,6 +60,21 @@ namespace chess_console.BoardGame.Chess
                 {
                     mat[pos.Line, pos.Column] = true;
                 }
+
+                // #SpecialMove En Passant
+                if (position.Line == 3)
+                {
+                    Position left = new Position(position.Line, position.Column - 1);
+                    if (board.ValidPosition(left) && ExistEnemy(left) && board.piece(left) == Match.VulnerableEnPassant)
+                    {
+                        mat[left.Line - 1, left.Column] = true;
+                    }
+                    Position right = new Position(position.Line, position.Column + 1);
+                    if (board.ValidPosition(right) && ExistEnemy(right) && board.piece(right) == Match.VulnerableEnPassant)
+                    {
+                        mat[right.Line - 1, right.Column] = true;
+                    }
+                }
             }
             else
             {
@@ -72,16 +90,31 @@ namespace chess_console.BoardGame.Chess
                     mat[pos.Line, pos.Column] = true;
                 }
 
-                pos.SetValue(position.Line + 1, position.Column - 1);
+                pos.SetValue(position.Line - 1, position.Column - 1);
                 if (board.ValidPosition(pos) && ExistEnemy(pos))
                 {
                     mat[pos.Line, pos.Column] = true;
                 }
 
-                pos.SetValue(position.Line + 1, position.Column + 1);
+                pos.SetValue(position.Line - 1, position.Column + 1);
                 if (board.ValidPosition(pos) && ExistEnemy(pos))
                 {
                     mat[pos.Line, pos.Column] = true;
+                }
+
+                // #SpecialMove En Passant
+                if (position.Line == 4)
+                {
+                    Position left = new Position(position.Line, position.Column - 1);
+                    if (board.ValidPosition(left) && ExistEnemy(left) && board.piece(left) == Match.VulnerableEnPassant)
+                    {
+                        mat[left.Line + 1, left.Column] = true;
+                    }
+                    Position right = new Position(position.Line, position.Column + 1);
+                    if (board.ValidPosition(right) && ExistEnemy(right) && board.piece(right) == Match.VulnerableEnPassant)
+                    {
+                        mat[right.Line + 1, right.Column] = true;
+                    }
                 }
             }
 
