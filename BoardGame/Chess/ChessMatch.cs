@@ -136,11 +136,28 @@ namespace BoardGame.Chess
         public void MakeMovement(Position origin, Position destination)
         {
             Piece capturedPiece = ExecuteMovement(origin, destination);
+
             if (IsInCheck(CurrentPlayer))
             {
                 UndoMovement(origin, destination, capturedPiece);
                 throw new BoardException("You can't put yourself in check!");
             }
+
+            Piece p = Board.piece(destination);
+
+            // #SpecialMove Promotion
+            if (p is Pawn)
+            {
+                if (p.color == Color.White && destination.Line == 0 || p.color == Color.Black && destination.Line == 7)
+                {
+                    p = Board.RemovePiece(destination);
+                    Pieces.Remove(p);
+                    Piece queen = new Queen(Board, p.color);
+                    Board.PutPiece(queen, destination);
+                    Pieces.Add(queen);
+                }
+            }
+
             if (IsInCheck(Opponent(CurrentPlayer)))
             {
                 check = true;
@@ -158,8 +175,6 @@ namespace BoardGame.Chess
                 Turn++;
                 ChangePlayer();
             }
-
-            Piece p = Board.piece(destination);
 
             // #SpecialMove En Passant
             if (p is Pawn && (destination.Line == origin.Line + 2 || destination.Line == origin.Line - 2))

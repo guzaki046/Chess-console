@@ -90,13 +90,13 @@ namespace chess_console.BoardGame.Chess
                     mat[pos.Line, pos.Column] = true;
                 }
 
-                pos.SetValue(position.Line - 1, position.Column - 1);
+                pos.SetValue(position.Line + 1, position.Column - 1);
                 if (board.ValidPosition(pos) && ExistEnemy(pos))
                 {
                     mat[pos.Line, pos.Column] = true;
                 }
 
-                pos.SetValue(position.Line - 1, position.Column + 1);
+                pos.SetValue(position.Line + 1, position.Column + 1);
                 if (board.ValidPosition(pos) && ExistEnemy(pos))
                 {
                     mat[pos.Line, pos.Column] = true;
