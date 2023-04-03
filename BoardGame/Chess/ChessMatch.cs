@@ -1,9 +1,6 @@
 ﻿using BoardGame.Enums;
 using BoardGame.Exceptions;
 using chess_console.BoardGame.Chess;
-using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography.X509Certificates;
 
 namespace BoardGame.Chess
 {
@@ -41,6 +38,27 @@ namespace BoardGame.Chess
             {
                 Captured.Add(capturedPiece);
             }
+
+            // special move Minor castling
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position originR = new Position(origin.Line, origin.Column + 3);
+                Position destinationR = new Position(origin.Line, origin.Column + 1);
+                Piece R = Board.RemovePiece(originR);
+                R.IncrementMovesQty();
+                Board.PutPiece(R, destinationR);
+            }
+
+            // special move Major castling
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position originR = new Position(origin.Line, origin.Column - 4);
+                Position destinationR = new Position(origin.Line, origin.Column - 1);
+                Piece R = Board.RemovePiece(originR);
+                R.IncrementMovesQty();
+                Board.PutPiece(R, destinationR);
+            }
+
             return capturedPiece;
         }
 
@@ -54,6 +72,26 @@ namespace BoardGame.Chess
                 Captured.Remove(capturedPiece);
             }
             Board.PutPiece(p, origin);
+
+            // special move Minor castling
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position originR = new Position(origin.Line, origin.Column + 3);
+                Position destinationR = new Position(origin.Line, origin.Column + 1);
+                Piece R = Board.RemovePiece(destinationR);
+                R.DecrementMovesQty();
+                Board.PutPiece(R, originR);
+            }
+
+            // special move Major castling
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position originR = new Position(origin.Line, origin.Column - 4);
+                Position destinationR = new Position(origin.Line, origin.Column - 1);
+                Piece R = Board.RemovePiece(destinationR);
+                R.DecrementMovesQty();
+                Board.PutPiece(R, originR);
+            }
         }
 
         public void MakeMovement(Position origin, Position destination)
@@ -237,7 +275,7 @@ namespace BoardGame.Chess
             PutNewPiece('b', 1, new Knight(Board, Color.White));
             PutNewPiece('c', 1, new Bishop(Board, Color.White));
             PutNewPiece('d', 1, new Queen(Board, Color.White));
-            PutNewPiece('e', 1, new King(Board, Color.White));
+            PutNewPiece('e', 1, new King(Board, Color.White, this));
             PutNewPiece('f', 1, new Bishop(Board, Color.White));
             PutNewPiece('g', 1, new Knight(Board, Color.White));
             PutNewPiece('h', 1, new Rook(Board, Color.White));
@@ -255,7 +293,7 @@ namespace BoardGame.Chess
             PutNewPiece('b', 8, new Knight(Board, Color.Black));
             PutNewPiece('c', 8, new Bishop(Board, Color.Black));
             PutNewPiece('d', 8, new Queen(Board, Color.Black));
-            PutNewPiece('e', 8, new King(Board, Color.Black));
+            PutNewPiece('e', 8, new King(Board, Color.Black, this));
             PutNewPiece('f', 8, new Bishop(Board, Color.Black));
             PutNewPiece('g', 8, new Knight(Board, Color.Black));
             PutNewPiece('h', 8, new Rook(Board, Color.Black));
